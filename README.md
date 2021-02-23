@@ -94,7 +94,7 @@ DHCP это замечательно, но нужно назначить ста�
 ```sudo nano /etc/ssh/sshd_config```  
  
 
-##9. Правим настройку иксов для передачи по SSH
+## 9. Правим настройку иксов для передачи по SSH
 added on client configuration file /etc/ssh/ssh_config this line :
 ```   XAuthLocation /usr/bin/xauth```
 ```   ForwardAgent yes```
@@ -109,14 +109,14 @@ added on client configuration file /etc/ssh/ssh_config this line :
 (xauth не проходит, и какой монитор тоже не понимает)
    
 
-##10. Ставим ГИТ  
+## 10. Ставим ГИТ  
 
 ```sudo apt-get update```
 ```sudo apt-get install git```
 
 открываем пустой конфиг
 ```nano ~/.gitconfig```
-и пишем (копипастим)
+и пишем - копипастим (алиасы по желанию)
 ```[user]
     name = Ed Elensky
     email = mymail@gmail.com
@@ -137,7 +137,7 @@ added on client configuration file /etc/ssh/ssh_config this line :
         defaultBranch = main
 ```
 
-##11. Подключаем ГИТ к репозиторию на github.com
+## 11. Подключаем ГИТ к репозиторию на github.com
 
 читаем ключ (можно было новый сгенерить) и несем в профиль на гите.
 ```sudo cat ~/.ssh/id_rca.pub```
@@ -148,7 +148,7 @@ added on client configuration file /etc/ssh/ssh_config this line :
 клонируем 
 ```git clone git@github.com:EdwardElensky/homework.git homework```
 
-##12. Делаем заготовку под домашку (краткий алгоритм)
+## 12. Делаем заготовку под домашку (краткий алгоритм)
 tasks = [1,2,3,4]
 for n in tasks:
 ```	git checkout -b task(n)
