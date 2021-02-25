@@ -1,54 +1,67 @@
 #!/bin/bash
 
-# help info
+# 1. Maybe, user will wants help info.
 if [ "$1" = "-h" ]; then
     echo "Hello! This script use ss command.
 It can read IP adresses and names of processed
 and show names of organizations from whois
-You can type name and number of processes.
+You can type name of processes and number checking IP.
 Example:sh whois-connect.sh opera 5"
     exit 0
 fi
 
-# checking start parameter
-if [ $# -eq 2 ]
-then
-
-# name of process
- proc=$1
-# number of proc
- num_proc=$2
-
-else
-# set default process
-proc=firefox
-echo "You not set name of process. I will use default name - firefox."
+# 2. Checking start parameter (maybe tripple-check is too much, enought only $# -eq 2)
+if [ -n "$1" ] && [ -n "$2" ] && [ $# -eq 2 ]
+ then
+  echo "OK! I get from You two ("$#") parametres: "$1" and "$2"."
+ else
+  echo "I need 2 parametres for working. But you insert something wrong :-("
+ exit
 fi
 
+# 3. Name length of process (1-30 any symbols)
+if (echo "$1" | grep -E -q "^.{1,30}$");
+ then
+  proc=$1
+ else
+# If name more 30 symbols we will set default process
+  proc=firefox
+  echo "You not set correct name of process. I will use default name - firefox."
+fi
 
+# 4. Number of checked ip (any positive number)
+if (echo "$2" | grep -E -q "^\+?[1-9][0-9]*$");
+ then
+  num_ip=$2
+ else
+# Set default number of ip if user forgoted which type numbers
+  num_ip=5
+  echo "You not set correct number of IP. I will work with 0-5 IP addreses"
+fi
 
-# get raw data fromm ss output and filtered by process (changed netstat to ss and -l not used)
+# 5. Get raw data fromm ss output and filtered by process (changed netstat to ss and -l not used)
 raw_data=`ss -tunap`
 #echo "step 1. raw data"
 #echo "$raw_data"
 
-# data filtered by process (I use echo because awk <<< $S not work)
+# 6. Data filtered by process (I use echo because awk <<< $S not work)
 filtered_data=$(echo "$raw_data" | awk '/'${proc}'/ {print $6}')
 #echo "step 2. filtered data"
 #echo "$filtered_data"
 
-# make trimmed data from filtered data (I can use "awk -F":" '{print $1}'" too)
+# 7. Make trimmed data from filtered data (I can use "awk -F":" '{print $1}'" too)
 trimmed_data=$(echo "$filtered_data" | cut -d: -f1)
-echo "step 3. trimmed data"
-echo "$trimmed_data"
+#echo "step 3. trimmed data"
+#echo "$trimmed_data"
 
-# dublicate remover (It is no bigdata ->  I used "uniq -u" instead of "sort | uniq -c")
+# 8. Dublicate remover (It is no bigdata ->  I used "uniq -u" instead of "sort | uniq -c")
 clean_data=$(echo "$trimmed_data" | uniq -u )
-echo "step 4. clean data"
-echo "$clean_data"
+#echo "step 4. clean data"
+#echo "$clean_data"
 
-# Now we sort our data and take last n (five) IP
-last_data=$(echo "$clean_data" | tail -n "$num_proc" )
+# 9. Now we sort our data and take last n (five) IP
+last_data=$(echo "$clean_data" | tail -n "$num_ip" )
 echo "step 5. last data :-)"
 echo "$last_data"
 
+# 10.
