@@ -73,8 +73,14 @@ ip_table=$(echo "$last_data" | grep -E "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]
 # 11. Unfortunately, now I was start writed the main function of this script!
 for ip in $ip_table
 do
-whois $ip | awk -F':' '/^[Oo]rganization|^[Nn]etname/ {print $2}'
+#org_list=$(whois $ip | awk -F':' '/^Organization|^Netname/ {print $2}')
+whois $ip | awk -F':' '/^Organization|^Netname/ {print $2}'
 #whois $ip | awk -F':' '/^Organization/ {print $2}'
 #whois $ip | awk -F':' '/^OrgName/ {print $2}'
-
 done
+
+# 12. Ask User for saving data in the file
+# probably i do it.
+#read -p 'Save result in file? (Y/N): ' user_answer
+#echo "$user_answer"
+#echo "$org-list"
