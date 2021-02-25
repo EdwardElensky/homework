@@ -71,10 +71,12 @@ DHCP это замечательно, но нужно назначить ста�
 ```sudo apt-get install curl```
 ```sudo apt install net-tools```
 ```sudo apt install netcat```
+```sudo apt install whois```
 ```sudo apt install nmap```
 проверяем (или не проверяем)
 ```curl -4 wttr.in/Vitebsk```
 ```nmap -version```
+```whois 194.158.196.137```
 ```netcat -help ```
  
 ## 8. Настраиваем SSH
