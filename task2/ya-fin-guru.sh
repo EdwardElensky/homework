@@ -1,7 +1,14 @@
 #!/bin/bash
 
 #help
+if [ "$1" = "-h" ]; then
 
+	echo "Hello! This script work with data from https://yandex.ru/news/quotes/ .
+If you allow it can download data and tell you which March the price was the least volatile since 2015.
+To do so you'll have to find the difference between MIN and MAX values for the period.
+	exit 0
+
+fi
 
 # it is plan
 echo "Hello!"
