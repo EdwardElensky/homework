@@ -13,7 +13,49 @@ echo "Hello!"
 # 0. check  quotes.json
 if [ -r ./quotes.json ]; then
 echo "Cool! Файл существует!"
-echo "..."
+
+# jq -j '.prices[][0] |= (. / 1000 | strftime("%Y%m"))' quotes.json
+# jq -r '.prices[][0] |= (. / 1000 | date -d @$((()/1000)) "+%m-%Y"' quotes.json
+# jq -r '.prices[][]' quotes.json | awk 'NR%2 {$1 = $1/1000} {print $1, NR}'
+
+
+raw_date_tab=$(jq -c '.prices[][0]' quotes.json | awk '{$1 = $1/1000} {print $1}' )
+#echo "$raw_date_tab"
+#date_tab=$(date -d @1614372599 "+%m-%Y")
+
+
+val_tab=$(jq -c '.prices[][1]' quotes.json | awk '{print $1, NR}' )
+# echo "$date_tab"
+
+# date_tab="$( date "+%m-%Y" --date=@1614372599)"
+# echo "$date_tab"
+
+# --------------- worked
+#for dat in {$raw_date_tab};
+#do
+#date  -d @$dat  "+%m-%Y"
+#done
+
+#------------ bad work
+#while read dat;
+#do
+#    date_tab+="$( date -d @$dat "+%m-%Y");"
+#done <<< "$raw_date_tab"
+
+#echo "$date_tab"
+
+# -----------bad
+#dateval=$(paste "$date_tab" "$val_tab")
+#echo "$dateval"
+
+for dat in $raw_date_tab;
+do
+test100500+=$(date  -d @$dat  "+%m-%Y%t")
+done
+echo $test100500 | sed 's/\s\+/\n/g'
+
+
+
 else
 echo "Hmm... Файл нe существует! :-)"
 while true; do
