@@ -33,7 +33,9 @@ done
 
 else
 echo "The json file is exist. Good. We will work..."
-sleep 1s
+TMPDIR=".${0##*/}-$$" && mkdir -v "$TMPDIR"
+sleep 1s #ha ha ha
+ls -ali $TMPDIR/
 
 echo "get dates from file..."
 raw_date_tab=$(jq -c '.prices[][0]' quotes.json | awk '{$1 = $1/1000} {print $1}' )
@@ -60,7 +62,12 @@ filt_m=$(grep "$month " <(echo "$dvt"))
 
 # echo "$filt_m"
 
-awk '{ print $3 >>($1"-"$2); close(1$"-"$2) }' <(echo "$filt_m")
+
+awk -v '{ print $3 >>($TMPDIR/$1"-"$2); close($TMPDIR/1$"-"$2) }' <(echo "$filt_m")
+
+ls -ali $TMPDIR/
+
+# awk -v m=$[i*2-1] 'FNR == m {print $2}'
 
 # берется среднее значение курса за март. 
 # Затем, проверяется разность между средним значением и  минимальным и максимальным курсом за период (март). 
