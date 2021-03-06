@@ -52,35 +52,35 @@ dvt=$(paste <(echo "$dat_tab") <(echo "$val_tab"))
 echo "data filtering..."
 filt_m=$(grep "$month " <(echo "$dvt"))
 # ==============================
-echo "separate data by month"
+echo "separate data by month..."
 separate_month=$(awk -v y="$TMPDIR" '{print y ; print $3 >>(y"/"$1"_"$2); close(y"/"1$"_"$2) }' <(echo "$filt_m"))
-
 list_of_month=$(ls "$TMPDIR")
-# echo "$list_of_month"
+number_of_var=$(grep _ -c <(echo "$list_of_month"))
+# echo "$number_of_var"
 
+count="$number_of_var"
+for a in ${list_of_month[@]}; do
+    var=month_$count
+    eval $var=$a
+#    eval echo \$$var
+echo ${list_of_month["$count"]}
+#echo ""$TMPDIR"/"$list_of_month""
+#echo ""$TMPDIR"/$(grep ${list_of_month[@]} <(echo "$TMPDIR"/"$list_of_month"))"
+    (( count-- ))
 
-#for var in "$list_of_month";
-#do
-count=$(grep _ -c <(echo "$list_of_month"))
-echo "$count"
-#var=$("$TMPDIR"/var)
-#echo "$var"
-#done
+#    echo "$var"
+#    cat <(echo "$TMPDIR/${list_of_month[@]}")
+done
 
+#sorted_month=$(sort <(echo $TMPDIR/${list_of_month[@]})
+#min_val=$(tail -n 1 <(echo $sorted_month))
+#max_val=$(hesd -n 1 <(echo $sorted_month))
+#vola=$(($max_val-$min_val)/2)
 
 
 # ==============================
+
 rm -r $TMPDIR
-# берется среднее значение курса за март. 
-# Затем, проверяется разность между средним значением и  минимальным и максимальным курсом за период (март). 
-# И далее выбирается год, в который в марте разница была минимальна.
-# mean — среднее
-# max — максимальное
-# min — минимальное
-# volatility = ((mean - min) + (max - mean))/2  -eq  (max-min)/2
-
-
-
 
 fi
 
