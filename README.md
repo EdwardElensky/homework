@@ -131,8 +131,8 @@ added on client configuration file /etc/ssh/ssh_config this line :
         safecrlf = warn
         quotepath = off
 [alias]
-        lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset)  ^`^t %C(bold green)(%ar)%C(reset) %$
-        lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset)  ^`^t %C(bold cyan)%aD%C(reset) %C(b$
+        lg1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset)  ^^t %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white) ^^t %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+        lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset)  ^^t %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(bold white) ^^t %an%C(reset)' --abbrev-comm$
         lg = !  git lg1
         hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [init]
