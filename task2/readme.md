@@ -16,22 +16,18 @@ jq -r '.prices[][]' quotes.json | grep -oP '\d+\.\d+' | tail -n 14 | awk -v mean
 * man date
 * Yandex likes zeroes!
 
-## Станьте финансовым гуру
-`` sh
-# Скачать базу данных
-curl -s https://yandex.ru/news/quotes/graph_2000.json> ./quotes.json
-``
-Теперь у вас есть исторические котировки пары EUR / RUB с конца ноября 2014 года. Пришло время повеселиться:
-`` sh
-# получим среднее значение за последние 14 дней и решим, покупать ли евро:
-jq -r '.prices [] []' quotes.json | grep -oP '\ d + \. \ d +' | хвост -n 14 | awk -v mean = 0 '{mean + = $ 1} END {print mean / 14}'
-``
-* попробуйте понять команду выше. Прочтите что-нибудь связанное с `jq` и` awk`.
-* удалите часть `grep -oP '\ d + \. \ d +' ', сделайте то же самое без сопоставления с образцом
-* скажите, в каком марте цена была наименее волатильной с 2015 года? Для этого вам необходимо найти разницу между значениями MIN и MAX за период.
-
-### Подсказки
-* man date
-* Яндекс любит нули!
 
 
+## How it run
+If you have internet or file quotes.json (from https://yandex.ru/news/quotes/graph_2000.json ) just run script ya-fin-guru.sh
+
+## How it work
+Script check file quotes.json in script directory.
+If quotes.json does not exist script asks user for download it.
+Them script create temp folder for temp files.
+From quotes.json takes two rows (dates and values) preparing (convert date) and input in two variables.
+Dates and values merging in one table, filtering and separating by files in temp directory.
+Here started teribble code (almost beautifull function and while-cycle) Sorry.
+For every file in TMPDIR calculate volatility and add in volatility-list
+Sort of volatility-list, take the minimum value of volatility and show it.
+Its all.
