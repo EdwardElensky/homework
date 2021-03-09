@@ -52,14 +52,31 @@ while true; do
 done
 
 else
-# ==============================
 echo "get dates from file..."
 raw_tab=$(jq '.[].user.login' pulls.json)
-# echo "$raw_tab"
 echo "sorting data..."
-sort_tab=$(echo "$raw_tab" | sort | uniq -c | sort -r)
+user_tab=$(echo "$raw_tab" | sort | uniq -c | sort -r | grep -v "      1 " )
 
-echo "$sort_tab"
+echo "***************************************************"
+echo "Top list:"
+echo "Num of PR / Nickname"
+echo "$user_tab"
+echo "***************************************************"
+
+title_tab=$(jq '.[].title' pulls.json)
+
+name_title_tab=$(paste <(echo "$raw_tab") <(echo "$title_tab"))
+
+users_tab=$(echo "$user_tab" | cut -d '"' -f 2 )
+
+
+for name in $users_tab
+	do
+		echo "===================================================="
+		echo  "PR of $name :"
+		echo "$name_title_tab" | grep "$name"
+		echo "===================================================="
+	done
 
 echo "Profit!"
 
