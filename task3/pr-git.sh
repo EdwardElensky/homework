@@ -4,44 +4,42 @@
 if [ "$1" = "-h" ]; then
         echo "Hello! This script ver.0.1beta use github API.
 It can show names contributors and number of pull-request
-You should type name and repo. Example: pr-git.sh mozilla-mobile firefox-ios "
-        exit
+You should type Github URL with username and repository.
+Example: pr-git.sh https://github.com/mozilla-mobile/firefox-ios/ "
+        exit 0
 fi
 
 # start check ============
-if [ -n "$1" ] && [ -n "$2" ] && [ $# -eq 2 ];
+if [ -n "$1" ] && [ $# -eq 1 ];
 then
-        echo "Start work with two ("$#") parametres: "$1" and "$2"."
+        echo "Start work with this URL: "$1"."
 else
-        echo "I need 2 parametres. Please, take me name and repo."
+        echo "I need username and repo. Please, take me URL https://github.com/user/repository."
 exit
 fi
 
-if (echo "$1" | grep -E -q "^.{1,30}$");
+if (echo "$1" | grep -E -q "^.{1,100}$");
 then
-        name=$1
+       url=$1
+# construct link
+name=$(echo "$url" | cut -d '/' -f 4)
+repo=$(echo "$url" | cut -d '/' -f 5)
 else
-        name=mozilla-mobile
-        echo "You not set correct name. I will use default name."
+       name=mozilla-mobile
+       repo =firefox-ios
+       echo "You not set correct URL. I will use default name and repo."
 fi
 
-if (echo "$2" | grep -E -q "^.{1,30}$");
-then
-        repo=$2
-else
-        repo=firefox-ios
-  echo "You not set correct repo. Now will be use default repo."
-fi
-
-# construct link ==(no use)==============
+# ==(no use)==============
+# https://github.com/mozilla-mobile/firefox-ios/
 # target-link=$(echo "https://api.github.com/repos/$name/$repo/pulls?q=state%3Aopen")
 # short link          https://api.github.com/repos/$name/$repo/pulls?state=open
 # example # https://api.github.com/repos/mozilla-mobile/firefox-ios/pulls?q=state%3Aopen
 
-
-# construct link and get data ===========
-if [ ! -r ./pulls.json ]; then
-echo "Json file does not exist!"
+if [ -r ./pulls.json ]; then
+rm -rf pulls.json
+else
+echo "Your old Json file already does not exist!" # it is real evil thing
 while true; do
     read -p "Do you wish to download this file?(Y/N) " yn
     case $yn in
@@ -50,9 +48,9 @@ while true; do
         * ) echo "Please answer (Y)yes or (N)no. ";;
     esac
 done
+fi
 
-else
-echo "get dates from file..."
+echo "get data from file..."
 raw_tab=$(jq '.[].user.login' pulls.json)
 echo "sorting data..."
 user_tab=$(echo "$raw_tab" | sort | uniq -c | sort -r | grep -v "      1 " )
@@ -69,7 +67,6 @@ name_title_tab=$(paste <(echo "$raw_tab") <(echo "$title_tab"))
 
 users_tab=$(echo "$user_tab" | cut -d '"' -f 2 )
 
-
 for name in $users_tab
 	do
 		echo "===================================================="
@@ -77,10 +74,6 @@ for name in $users_tab
 		echo "$name_title_tab" | grep "$name"
 		echo "===================================================="
 	done
-
 echo "Profit!"
-
-
-
-fi
+rm -rf pulls.json
 exit
