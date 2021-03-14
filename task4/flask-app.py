@@ -1,53 +1,53 @@
 import emoji
 from emoji import emojize
-# import json  # no used
 from flask import Flask, request
 app = Flask(__name__)
 
+# ---- test area ----(can be removed)--
+# https://unicode.org/Public/emoji/13.1/emoji-sequences.txt
 print(emoji.emojize(':cookie:'))
-print("\N{grinning face}")
-print("\U0001F606")
-# @app.route('/')
-# def index():
-#    return "\N{winking face} Hello world"
+print(emoji.emojize(':cat:'))
+print(emoji.emojize(':dog:'))
+print(emoji.emojize(':camel:'))
+print(emoji.emojize(':eyes:'))
+print(emoji.emojize(':pig:'))
+print(emoji.emojize(':ram:'))
+print(emoji.emojize(':snail:'))
+print(emoji.emojize(':dragon:'))
+print(emoji.emojize(':boy:'))
+print(emoji.emojize(':house:'))
+print(emoji.emojize(':trophy:'))
+print(emoji.emojize(':cyclone:'))
+print(emoji.emojize(':banana:'))
+print(emoji.emojize(':ewe:'))
+print(emoji.emojize(':rooster:'))
+print(emoji.emojize(':crab:'))
+print(emoji.emojize(':beaver:'))
+print(emoji.emojize(':snowflake:'))
+print(emoji.emojize(':satellite:'))
+# -----------end test area-------
 
 
-@app.route('/', methods=['GET', 'POST']) # of course, I can do it separately.
+@app.route('/', methods=['GET', 'POST'])
 def json_req():
     if request.method == 'GET':
-        return '''This app wait your POST request.
-        Example: curl -XPOST -d'{"word":"cat", "count": 5}' http://hostname/ '''
+        return '''This app wait your POST request. 
+        Example: curl -XPOST -d'{"word":"cat", "count": 5}' http://localhost/ '''
     if request.method == 'POST':
-        request_data = request.get_json(force=True)
-    i = 1  # add counter
-    answer = emojize(":cookie:") # I need more words
-    data = request.get_json()
-    while i <= data["count"]:  # Stackoverflow, I love you!
-        answer = answer + data["word"] + emojize(":cookie:")
-        i += 1
+        data = request.get_json(force=True)
+        i = 1
+        answer = emojize(":" + data["word"] + ":")
+        while i <= data["count"]:
+            answer = answer + data["word"] + emojize(":" + data["word"] + ":")
+            i += 1
 
-    ans = answer + '\n'
+        full_answer = answer + '\n'
 
-    return ans
+        return full_answer
 
 
-# ---------------------------
-# example (bad)
-# @app.route("/me")
-# def me_api():
-#    user = get_current_user()
-#    return {
-#        "username": user.username,
-#        "theme": user.theme,
-#        "image": url_for("user_image", filename=user.image),
-#    }
-#
-# @app.route("/users")
-# def users_api():
-#    users = get_all_users()
-#    return jsonify([user.to_json() for user in users])
 # ----------------------------
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=1080, debug=True) # I need 80th port !!!!!!
+    app.run(host='0.0.0.0', port=1080, debug=False) # I need 80th port !!!!!!

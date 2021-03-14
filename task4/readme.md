@@ -1,27 +1,52 @@
-# Ansible assignment
-## Create and deploy your own service
-### The development stage:
-For the true enterprise grade system we will need Python3, Flask and emoji support. Why on Earth would we create stuff that does not support emoji?!
+## flask-app.py - it is my python3 flask application 
 
-* the service listens at least on port 80
-* the service accepts GET and POST methods
-* the service should receive `JSON` object and return a string decorated with your favorite emoji in the following manner:
-```sh
-curl -XPOST -d'{"word":"evilmartian", "count": 3}' http://myvm.localhost/
-💀evilmartian💀evilmartian💀evilmartian💀
+## Requirements
+* OS Lunux
+* Python 3
+* Flask
 
-curl -XPOST -d'{"word":"mice", "count": 5}' http://myvm.localhost/
-🐘mice🐘mice🐘mice🐘mice🐘mice🐘
-```
-* bonus points for being creative when serving `/`
+## How it run:
+* ``python3 flask-app.py``
+* it avialable in your browser on 1080 port (after deploing it will change on 80 port)
 
-### Hints
-* [installing flask](https://flask.palletsprojects.com/en/1.1.x/installation/#installation)
-* [become a developer](https://flask.palletsprojects.com/en/1.1.x/quickstart/)
-* [or whatch some videos](https://www.youtube.com/watch?v=Tv6qXtc4Whs)
-* [dealing with payloads](https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask)
-* [Flask documentation](https://flask.palletsprojects.com/en/1.1.x/api/#flask.Request.get_json)
-* what would you expect to see when visiting a random unknown website?
+## How it use
+* do request:
+* ``curl -XPOST -d'{"word":"trophy", "count": 4}' http://yourhost:1080/ ``
+* and take answer:
+* 🏆trophy🏆trophy🏆trophy🏆trophy🏆
+
+--------------------
+
+
+
+## Ansible assignment
+
+## install
+* Обновляем список репозиториев ``apt-get update``
+* Пробуем установить пакет из репозитория ``apt-get install ansible``
+* Затем проверяем версию ``ansible —version``
+* Переходим в каталог с конфигурационными файлами  ``cd /etc/ansible/``
+* Просматриваем основной конфиг ``less ansible.cfg``
+* самым важным является ``hostfile = /etc/ansible/hosts`` , определяющим из какого файла будет браться список хостов на который распространяется конфигурация
+* Открываем файл ``/etc/ansible/hosts`` на редактирование и добавляем в него доменные имена или IP адреса нод, которыми будем управлять при помощи Ansible, в файле добавляется имя секции хостов — например [servers], которой потом будем обращаться
+``nano /etc/ansible/hosts``
+* генерируем ключи и отправляем публичный ключ на все сервера, которые были добавлены в hosts на предыдущем шаге
+``ssh-keygen`` 
+``ssh-copy-id 123.123.123.123
+ssh-copy-id 123.123.123.124
+ssh-copy-id 123.123.123.125``
+* Если возникают ошибки может потребоваться установить некоторые дополнительные пакеты
+``apt-get install libffi-dev g++ libssl-dev`` ``pip install pyopenssl pyasn1 ndg-httpsclient cryptography cryptography``
+* Попробуем вывести в консоль hostname всех серверов из hosts
+``ansible -m shell -a 'hostname' all``
+* Теперь можно (но не нужно, т.к. будем использовать .yml файл) отправить какой-то исполняемый файл на все сервера указав его расположение на текущем сервере и расположение на серверах, куда он отправляется ``ansible web -m copy -a «src=/etc/ansible/test.php dest=/home»``
+* Когда создан корректный .yml файл можно конфигурацию применить ко всем серверам выполненяя команду: ``ansible-playbook -K main.yml``
+
+---------
+
+
+
+
 
 ### The operating stage:
 * create an ansible playbook that deploys the service to the VM
@@ -36,31 +61,7 @@ curl -XPOST -d'{"word":"mice", "count": 5}' http://myvm.localhost/
 * iptables, sshd_config
 * good luck! ¯\_(ツ)_/¯
 
-# Ответственное задание
-## Создайте и разверните свой собственный сервис
-### Этап разработки:
-Для настоящей системы корпоративного уровня нам понадобится поддержка Python3, Flask и эмодзи. Зачем нам создавать вещи, которые не поддерживают эмодзи ?!
 
-* сервис слушает хотя бы порт 80
-* сервис принимает методы GET и POST
-* сервис должен получить объект `JSON` и вернуть строку, украшенную вашими любимыми эмодзи следующим образом:
-
-```sh
-curl -XPOST -d'{"word":"evilmartian", "count": 3}' http://myvm.localhost/
-💀evilmartian💀evilmartian💀evilmartian💀
-
-curl -XPOST -d'{"word":"mice", "count": 5}' http://myvm.localhost/
-🐘mice🐘mice🐘mice🐘mice🐘mice🐘
-```
-* бонусные баллы за творческий подход при обслуживании `/`
-
-### Подсказки
-* [установка flask] (https://flask.palletsprojects.com/en/1.1.x/installation/#installation)
-* [стать разработчиком] (https://flask.palletsprojects.com/en/1.1.x/quickstart/)
-* [или какие видео] (https://www.youtube.com/watch?v=Tv6qXtc4Whs)
-* [работа с полезными нагрузками] (https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask)
-* [Документация Flask] (https://flask.palletsprojects.com/en/1.1.x/api/#flask.Request.get_json)
-* что вы ожидаете увидеть при посещении случайного неизвестного веб-сайта?
 
 ### Операционный этап:
 * создать доступный playbook, который развертывает сервис на виртуальной машине
