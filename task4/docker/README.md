@@ -2,7 +2,7 @@
 * My flask-app run in docker
 * Used small alpine-python from hub.docker.com
 * I was update pip and use venv (it is not necessary but i do it just for example)
-* The working image has a size of ~~*129 MB*~~ 65,3 MB.
+* The working image has a size of ~~*129 MB*~~ ~~*65,3 MB *~~ 64.4 MB.
 
 ## Requirements
 * any Linux OS
